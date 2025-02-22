@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Profile Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css"/>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.js" integrity="sha512-CWVDkca3f3uAWgDNVzW+W4XJbiC3CH84P2aWZXj+DqI6PNbTzXbl1dIzEHeNJpYSn4B6U8miSZb/hCws7FnUZA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <style>
@@ -22,9 +23,11 @@
             <div class="col-md-8">
                 <h3 id="profile-name">Gavri Sharma</h3>
                 <p id="profile-location" class="text-muted">Doha, Qatar</p>
+                <div id="flag-div"></div>
             </div>
             <div class="col-md-4 text-end">
                 <img src="profile-placeholder.png" alt="Profile Pic" class="rounded-circle" width="70">
+                
             </div>
         </div>
 
@@ -77,6 +80,8 @@
             document.getElementById('fie-rank').textContent = data['Rank'] || 'N/A';
             document.getElementById('bio').textContent = data['Weapon'] || 'N/A';
             document.getElementById('profile-location').textContent = data['Residence'] || 'N/A';
+
+            document.getElementById('flag-div').innerHTML = "<span class='fi fi-" + data["Flag"] + "'></span>"
 
             const fieLink = document.getElementById("fie-link").querySelector("a");
             if (data['FIE Page']) {
