@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,9 +8,35 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
-            padding: 20px;
+            margin: 0;
+            padding: 0;
             display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .navbar {
+            width: 100%;
+            background-color: #2c3e50;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 14px 20px;
+            font-size: 18px;
+            transition: background 0.3s;
+        }
+        .navbar a:hover {
+            background-color: #34495e;
+            border-radius: 5px;
+        }
+        .container {
+            display: flex;
+            width: 80%;
+            margin-top: 20px;
         }
         .left-column, .right-column {
             flex: 1;
@@ -38,20 +65,48 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-       }
+        }
+        .navbar {
+            width: 100%;
+            background-color: #2c3e50;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 14px 20px;
+            font-size: 18px;
+        }
+        .logo {
+            height: 50px;
+            width: 50px;
+            border-radius: 50%
+        }
+        
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div class="left-column">
-        <h1 id="team-name"></h1>
-        <h2 id="coach-name"></h2>
-        <h3>Players:</h3>
-        <ul id="players-list"></ul>
+    <div class="navbar">
+        <a href="http://127.0.0.1:5500/home.html">Home</a>
+        <a href="http://127.0.0.1:5500/athletePage.html">Create Athlete Profile</a>
+        <a href="http://127.0.0.1:5500/coach_roster.html">Coach Roster</a>
+        <a href="http://127.0.0.1:5500/Coach.html">View Team</a>  
     </div>
-    <div class="right-column">
-        <h3>Team Performance</h3>
-        <canvas id="performance-chart"></canvas>
+    <div class="container">
+        <div class="left-column">
+            <h1 id="team-name"></h1>
+            <h2 id="coach-name"></h2>
+            <h3>Players:</h3>
+            <ul id="players-list"></ul>
+        </div>
+        <div class="right-column">
+            <h3>Team Performance</h3>
+            <canvas id="performance-chart"></canvas>
+        </div>
     </div>
 
     <script>
@@ -74,7 +129,7 @@
                     span.innerText = `${titleCase(player.FencerData.Name)} - ${titleCase(player.FencerData.Weapon)}`;
                     li.appendChild(img);
                     li.appendChild(span);
-                   playersList.appendChild(li);
+                    playersList.appendChild(li);
                 });
 
                 const yearlyStats = {};
