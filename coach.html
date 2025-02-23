@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -85,11 +84,33 @@
             width: 50px;
             border-radius: 50%
         }
-        
+        .players-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .button-container {
+            margin-left: 20px;
+        }
+        .view-applicants-btn {
+            background-color: #2980b9;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .view-applicants-btn:hover {
+            background-color: #1f6690;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+    
     <div class="navbar">
         <a href="http://127.0.0.1:5500/home.html">Home</a>
         <a href="http://127.0.0.1:5500/athletePage.html">Create Athlete Profile</a>
@@ -100,7 +121,12 @@
         <div class="left-column">
             <h1 id="team-name"></h1>
             <h2 id="coach-name"></h2>
-            <h3>Players:</h3>
+            <div class="players-header">
+                <h3>Players:</h3>
+                <div class="button-container">
+                    <a href="coach_view_applicants.html" class="view-applicants-btn">View Applicants</a>
+                </div>
+            </div>
             <ul id="players-list"></ul>
         </div>
         <div class="right-column">
@@ -119,9 +145,9 @@
                 document.getElementById("coach-name").innerText = `Coach: ${teamData["Coach name"]}`;
 
                 const playersList = document.getElementById("players-list");
-                teamData.Players.forEach(player => {
+                teamData.Players.forEach((player, index) => {
                     const li = document.createElement("li");
-                    li.onclick = () => window.location.href = 'index.html';
+                    li.onclick = () => window.location.href = 'index' + index + '.html';
                     const img = document.createElement("img");
                     img.src = player.FencerData.Image;
                     img.alt = player.FencerData.Name;
