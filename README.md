@@ -29,8 +29,6 @@ Link to the pitch deck : (https://docs.google.com/presentation/d/10Gmd_RV4oiTbaZ
 
 **Frameworks**: Django, Selenium, BeautifulSoup, Chart.js
 
-**APIs**: GROQ, Flux.1 (Black Forest labs), Hugging Face
-
 ## Challenges we ran into
 During the hackathon, our team encountered several challenges that tested our technical skills and collaboration. Our first major hurdle was to define our problem space. Several ideation and iterations cycles were done within the team in order to formulate our final idea. Many of our initial ideas in the various sports fields we were interested in were already somewhat researched in or already had some software that attempted to solve this. Spending considerable time iterating and considering new inspirations, we arrived at the current problem space. Another major problem was in data scraping and collection. Data scraping proved difficult as much of the data available for our sport, fencing, was stored on the International Fencing Federation Page (FIE). However, data, especially match results and urls were inconsistent, making data scraping hard. Finally, managing the word distribution based on the abilities of each member was a tough task as on. These problem required and emphasizes the importance of teammwork, passion, and adaptability to overcome these difficulties.
 
@@ -40,7 +38,7 @@ We are proud of several key accomplishments. Despite being relatively new to dat
 ## What we learned
 During the hackathon, we gained valuable experience in web development and data processing. We learned how to scrape and process data, and use new libraries for effective web development. Aditionally, we enhanced our skills in research, both during the ideation process and during the development process.
 
-## What's next for VisualEase
+## What's next for En Garde
 En Garde has major potential for the future. We see three major ways that this can expand and be furthur developed.
 More Sports: Tons of other sports such as tennis, wrestling, and golf have similar problem spaces that this software can be applied to. 
 Devlopment of Advanced Statistics: More statistical models can be developed to help coaches measure a player's impact. New metrics could also be created such as bWAR (bouts won above replacement), xW (expected wins), and xMOV (expected margin of victory). This could be a potential avenue for AI to be implemented to help find hidden meanings in these large datasets.
