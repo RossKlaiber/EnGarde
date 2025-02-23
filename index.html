@@ -27,15 +27,26 @@
             </div>
             <div class="col-md-4 text-end">
                 <img src="profile-placeholder.png" alt="Profile Pic" class="rounded-circle" width="70">
-                
             </div>
         </div>
 
         <hr>
-        <div>
-            <p><strong>FIE Link:</strong> <span id="fie-link"><a href="#">Click Here</a></span></p>
-            <p><strong>FIE Rank:</strong> <span id="fie-rank">Top 5%</span></p>
-            <p><strong>Bio:</strong> <span id="bio">Dataset 42</span></p>
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>FIE Link:</strong> <span id="fie-link"><a href="#">Click Here</a></span></p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Handedness:</strong> <span id="handedness">N/A</span></p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>FIE Rank:</strong> <span id="fie-rank">Top 5%</span></p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Age:</strong> <span id="age">N/A</span></p>
+            </div>
+            <div class="col-md-12">
+                <p><strong>Bio:</strong> <span id="bio">Dataset 42</span></p>
+            </div>
         </div>
 
         <hr>
@@ -75,12 +86,12 @@
             const response = await fetch('fencer_data.json');
             const data = await response.json();
 
-            // Update the HTML elements with extracted data
             document.getElementById('profile-name').textContent = data['Name'] || 'Unknown';
             document.getElementById('fie-rank').textContent = data['Rank'] || 'N/A';
             document.getElementById('bio').textContent = data['Weapon'] || 'N/A';
             document.getElementById('profile-location').textContent = data['Residence'] || 'N/A';
-
+            document.getElementById('handedness').textContent = data['Handedness'] || 'N/A';
+            document.getElementById('age').textContent = data['Age'] || 'N/A';
             document.getElementById('flag-div').innerHTML = "<span class='fi fi-" + data["Flag"] + "'></span>"
 
             const fieLink = document.getElementById("fie-link").querySelector("a");
@@ -90,7 +101,7 @@
                 fieLink.target = "_blank"
             } else {
                 fieLink.textContent = "N/A";
-                fieLink.removeAttribute("href"); // Remove href if there's no link
+                fieLink.removeAttribute("href");
             }
 
             createChart(document.getElementById('chart1'), 'line', [7, 7, 9, 10], 'Wins');
@@ -98,7 +109,6 @@
             createChart(document.getElementById('chart3'), 'line', [3, 5, 2, 6], 'Points');
             createSplitChart(document.getElementById('chart4'), [2, 4, 6, 8], 10, 6);
 
-            // Update profile image
             if (data['Image']) {
                 document.querySelector("img.rounded-circle").src = data['Image'];
             }
