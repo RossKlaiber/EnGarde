@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notre Dame Applicants</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            display: flex;
+        }
+        .left-column, .right-column {
+            flex: 1;
+            padding: 20px;
+        }
+        .left-column {
+            border-right: 1px solid #ccc;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            padding: 10px;
+            background: #ecf0f1;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+        img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+        .player-info {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+        .player-info .details {
+            display: flex;
+            justify-content: space-between;
+        }
+        .player-info .details div {
+            flex: 1;
+            padding: 0 10px;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="left-column">
+        <h1 id="team-name"></h1>
+        <h2 id="coach-name"></h2>
+        <h3>Players:</h3>
+        <ul id="players-list"></ul>
+    </div>
+    <div class="right-column">
+        <h3>Comparative performance</h3>
+        <canvas id="performance-chart"></canvas>
+    </div>
+
+    <script>
+        function titleCase(s) {return s.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');}
+
+        function createPlayerDatasets(applicants) {
+            return applicants.map((player, index) => {
+                return {
+                    label: player.FencerData.Name,
+                    data: player.YearlySummary.map(summary => ({
+                        x: summary.Year,
+                        y: summary.Wins / (summary.Wins + summary.Losses) // Win rate
+                    })),
+                    borderColor: getColor(index),
+                    backgroundColor: getColor(index), 
+                    borderWidth: 2,
+                    tension: 0.4
+                };
+            });
+        }
+        function getColor(index) {
+            const colors = [
+                'rgba(255, 99, 132, 1)',   // Red
+                'rgba(54, 162, 235, 1)',   // Blue
+                'rgba(255, 206, 86, 1)',   // Yellow
+                'rgba(75, 192, 192, 1)',   // Teal
+                'rgba(153, 102, 255, 1)',  // Purple
+                'rgba(255, 159, 64, 1)',   // Orange
+                'rgba(0, 128, 0, 1)',      // Green
+                'rgba(128, 0, 128, 1)',    // Dark Purple
+                'rgba(0, 0, 128, 1)',      // Navy Blue
+                'rgba(128, 128, 0, 1)'     // Olive
+            ];
+            return colors[index % colors.length]; // Cycle through colors
+        }
+
+        fetch('applicants.json')
+            .then(response => response.json())
+            .then(teamData => {
+                document.getElementById("team-name").innerText = `Team: ${teamData["Team Name"]}`;
+                document.getElementById("coach-name").innerText = `Coach: ${teamData["Coach name"]}`;
+
+                const playersList = document.getElementById("players-list");
+                teamData.Applicants.forEach(player => {
+                    const li = document.createElement("li");
+                    li.onclick = () => window.location.href = 'coach_player_profile.html';
+                    const img = document.createElement("img");
+                    img.src = player.FencerData.Image;
+                    img.alt = player.FencerData.Name;
+                    const span = document.createElement("span");
+                    span.className = "player-info";
+                    span.innerHTML = `
+                        <div>${titleCase(player.FencerData.Name)}</div>
+                        <div class="details">
+                            <div></div>
+                            <div>Rank: ${player.FencerData.Rank}</div>
+                            <div>Weapon: ${titleCase(player.FencerData.Weapon)}</div>
+                            <div>Hand: ${player.FencerData.Handedness}</div>
+                        </div>
+                    `;
+                    li.appendChild(img);
+                    li.appendChild(span);
+                    playersList.appendChild(li);
+                });
+
+                // Get all unique years from all players
+                const allYears = new Set();
+                teamData.Applicants.forEach(player => {
+                    player.YearlySummary.forEach(summary => allYears.add(summary.Year));
+                });
+
+                const sortedYears = Array.from(allYears).sort(); // Ensure chronological order
+
+                // Generate datasets with selective extension
+                const datasets = teamData.Applicants.map((player, index) => {
+                // Build an object mapping year -> win rate
+                let yearlyData = {};
+                player.YearlySummary.forEach(summary => {
+                    yearlyData[summary.Year] = summary.Wins / (summary.Wins + summary.Losses);
+                });
+                
+                // Find the index in sortedYears where this player first has data
+                const firstYearIndex = sortedYears.findIndex(year => yearlyData[year] !== undefined);
+                let lastKnownValue = null;
+                const winRateArray = sortedYears.map((year, idx) => {
+                    // For years before the player's first data, return null.
+                    if (idx < firstYearIndex) return null;
+                    
+                    // If we have data for the current year, update the last known value.
+                    if (yearlyData[year] !== undefined) {
+                        lastKnownValue = yearlyData[year];
+                    }
+                    
+                    // For the current year (or if data is missing, the last known value)
+                    return lastKnownValue;
+                });
+                
+                return {
+                    label: player.FencerData.Name,
+                    data: winRateArray,
+                    borderColor: getColor(index),
+                    backgroundColor: getColor(index).replace("1)", "0.7)"),
+                    borderWidth: 2,
+                    tension: 0.4,
+                    spanGaps: false // This ensures gaps (nulls) are not connected
+                };
+            });
+
+                // const yearlyStats = {};
+                // teamData.Applicants.forEach(player => {
+                //     player.YearlySummary.forEach(summary => {
+                //         const year = summary.Year;
+                //         if (!yearlyStats[year]) {
+                //             yearlyStats[year] = { wins: 0, losses: 0, count: 0 };
+                //         }
+                //         yearlyStats[year].wins += summary.Wins;
+                //         yearlyStats[year].losses += summary.Losses;
+                //         yearlyStats[year].count += 1;
+                //     });
+                // });
+
+                // const years = Object.keys(yearlyStats).sort();
+                // const winRates = years.map(year => {
+                //     const stats = yearlyStats[year];
+                //     return stats.wins / (stats.wins + stats.losses);
+                // });
+
+                // const playerDatasets = createPlayerDatasets(teamData.Applicants);
+
+                const ctx = document.getElementById('performance-chart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: sortedYears,
+                        datasets: datasets
+                    },
+                    options: {
+                        scales: {
+                            x: {
+                                type: 'category',
+                                title: {
+                                    display: true,
+                                    text: 'Year'
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                max: 1,
+                                title: {
+                                    display: true,
+                                    text: 'Win Rate'
+                                }
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(error => console.error('Error loading roster:', error));
+    </script>
+</body>
+</html>
