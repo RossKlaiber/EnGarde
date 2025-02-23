@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Coach Roster</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ffb6c1, #ff8c00);
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            background: #ffffff;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        .container:hover {
+            transform: translateY(-10px);
+        }
+        h2 {
+            color: #ff6347;
+            font-size: 36px;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            color: #444;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:active {
+            background-color: #004085;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>College Coach Portal</h2>
+        
+        <label for="collegeName">Enter College Name:</label>
+        <input type="text" id="collegeName" placeholder="College Name">
+        
+        <label for="playerName">Enter Player Name:</label>
+        <input type="text" id="playerName" placeholder="Player Name">
+        
+        <label for="fieId">Enter Player FIE ID:</label>
+        <input type="text" id="fieId" placeholder="FIE ID">
+        
+        <button onclick="addPlayer()">Add Player</button>
+        <button onclick="submitData()">Submit</button>
+    </div>
+
+    <script>
+        let players = [];
+        let collegeName = "";
+
+        function addPlayer() {
+            const playerName = document.getElementById("playerName").value;
+            const fieId = document.getElementById("fieId").value;
+            
+            if (playerName && fieId) {
+                players.push({ name: playerName, fieId: fieId });
+
+                // Clear inputs after adding
+                document.getElementById("playerName").value = "";
+                document.getElementById("fieId").value = "";
+
+                alert("Player added successfully!");
+            } else {
+                alert("Please enter both name and FIE ID.");
+            }
+        }
+
+        function submitData() {
+            collegeName = document.getElementById("collegeName").value;
+
+            if (!collegeName) {
+                alert("Please enter a college name.");
+                return;
+            }
+
+            // Prepare the data to pass in the URL
+            const playerNames = players.map(player => `${player.name} (FIE ID: ${player.fieId})`).join(",");
+            const queryParams = `?players=${encodeURIComponent(playerNames)}&college=${encodeURIComponent(collegeName)}`;
+
+            // Open team-roster.html with the query parameters
+            const newPage = window.open(`team_roster.html${queryParams}`, "_blank");
+
+            if (newPage) {
+                newPage.document.close();
+            } else {
+                alert("Please allow popups for this site.");
+            }
+        }
+    </script>
+</body>
+</html>

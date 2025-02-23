@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Roster</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ffb6c1, #ff8c00);
+            margin: 0;
+            padding: 0;
+        }
+        .roster-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background: #ffffff;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        .roster-container:hover {
+            transform: translateY(-10px);
+        }
+        h2 {
+            color: #ff6347;
+            font-size: 36px;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+        p {
+            color: #444;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .player-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 0;
+            list-style: none;
+        }
+        .player-item {
+            background-color: #f1f1f1;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #ddd;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .player-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        .player-item h3 {
+            color: #007bff;
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+        .player-item p {
+            color: #555;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        .player-item .fie-id {
+            color: #8b4513;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+        }
+        .back-btn:hover {
+            background-color: #0056b3;
+        }
+        .back-btn:active {
+            background-color: #004085;
+        }
+    </style>
+</head>
+<body>
+    <div class="roster-container">
+        <h2>Team Roster</h2>
+        <p>Here is the list of players added to your team:</p>
+        <ul class="player-list" id="playerList"></ul>
+        <a href="coach_roster.html" class="back-btn">Back to Coach Portal</a>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const playersData = urlParams.get('players');
+        const collegeName = urlParams.get('college');
+
+        const heading = document.querySelector('h2');
+        if (collegeName) {
+            heading.innerHTML = `${collegeName} - Team Roster`;
+        }
+
+        if (playersData) {
+            const players = decodeURIComponent(playersData).split(',');
+            const playerList = document.getElementById('playerList');
+            players.forEach(player => {
+                const li = document.createElement('li');
+                li.className = 'player-item';
+                li.innerHTML = `<h3>${player}</h3>`;
+                playerList.appendChild(li);
+            });
+        }
+    </script>
+</body>
+</html>
