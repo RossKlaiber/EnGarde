@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Profile Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.js" integrity="sha512-CWVDkca3f3uAWgDNVzW+W4XJbiC3CH84P2aWZXj+DqI6PNbTzXbl1dIzEHeNJpYSn4B6U8miSZb/hCws7FnUZA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        .chart-container {
+            width: 100%;
+            height: 250px;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+<div class="container mt-4">
+    <div class="card p-4">
+        <div class="row">
+            <div class="col-md-8">
+                <h3 id="profile-name">Gavri Sharma</h3>
+                <p id="profile-location" class="text-muted">Doha, Qatar</p>
+                <div id="flag-div"></div>
+            </div>
+            <div class="col-md-4 text-end">
+                <img src="profile-placeholder.png" alt="Profile Pic" class="rounded-circle" width="70">
+            </div>
+        </div>
+
+        <hr>
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>FIE Link:</strong> <span id="fie-link"><a href="#">Click Here</a></span></p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Handedness:</strong> <span id="handedness">N/A</span></p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>FIE Rank:</strong> <span id="fie-rank">Top 5%</span></p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Age:</strong> <span id="age">N/A</span></p>
+            </div>
+            <div class="col-md-12">
+                <p><strong>Weapon:</strong> <span id="weapon">Dataset 42</span></p>
+            </div>
+        </div>
+
+        <hr>
+        <h5>Data from 2025</h5>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card p-2 text-center chart-container">
+                    <canvas id="chart1"></canvas>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card p-2 text-center chart-container">
+                    <canvas id="chart2"></canvas>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card p-2 text-center chart-container">
+                    <canvas id="chart3"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <p></p>
+
+        <div class="mt-4">
+            <h6>Overall Progress</h6>
+            <div class="card p-3 text-center chart-container">
+                <canvas id="chart4"></canvas>
+            </div>
+        </div>
+
+        <p></p>
+
+        <div class="mt-4">
+            <h6 id="trajectory-phrase">Notre Dame's trajectory with Guari</h6>
+            <div class="card p-3 text-center chart-container">
+                <canvas id="chart5"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function titleCase(s) {return s.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');}
+
+    async function loadFencerData() {
+        try {
+            const response = await fetch('Chwonjnik_data.json');
+            const data = await response.json();
+
+            document.getElementById('profile-name').textContent = titleCase(data['Name']) || 'Unknown';
+            document.getElementById('fie-rank').textContent = data['Rank'] || 'N/A';
+            document.getElementById('weapon').textContent = titleCase(data['Weapon']) || 'N/A';
+            document.getElementById('profile-location').textContent = data['Residence'] || '';
+            document.getElementById('handedness').textContent = data['Handedness'] || 'N/A';
+            document.getElementById('age').textContent = data['Age'] || 'N/A';
+            document.getElementById('flag-div').innerHTML = "<span class='fi fi-" + data["Flag"] + "'></span>"
+
+            const fieLink = document.getElementById("fie-link").querySelector("a");
+            fieLink.href = data['FIE Page'];
+            fieLink.textContent = "FIE Profile";
+            fieLink.target = "_blank"
+
+            const gameDataResponse = await fetch('Chwonjnik_game_data.json');
+            const gameData = await gameDataResponse.json();
+            const wins = gameData.Competitions.map(comp => comp.Wins);
+            const losses = gameData.Competitions.map(comp => comp.Losses);
+            const differences = gameData.Competitions.map(comp => comp.Difference);
+            const annuals = gameData.YearlySummary.map(comp => comp.Difference);
+            const annual_names = gameData.YearlySummary.map(comp => comp.Year);
+
+            createChart(document.getElementById('chart1'), 'line', wins, 'Wins');
+            createChart(document.getElementById('chart2'), 'line', losses, 'Losses');
+            createChart2(document.getElementById('chart3'), 'line', differences, 'Differential');
+            createChart2(document.getElementById('chart4'), 'line', annuals, 'Differential', annual_names);
+
+            //Grab data from roster
+            const roster = await fetch('roster.json');
+            const team_data = await roster.json();
+            
+            document.getElementById("trajectory-phrase").textContent = `${team_data["Team Name"]}'s trajectory with ${titleCase(data["Name"])}`;
+
+            if (data['Image']) {
+                document.querySelector("img.rounded-circle").src = data['Image'];
+            }
+        } catch (error) {
+            console.error("Error loading fencer data:", error);
+        }
+    }
+
+    // Run function when page loads
+    window.onload = loadFencerData;
+    const createArray = (n) => Array.from({ length: n }, (_, i) => i + 1);
+
+    function createChart(ctx, type, data, label) {
+        const maxVal = Math.max(15, ...data);
+        new Chart(ctx, {
+            type: type,
+            data: {
+                labels: createArray(data.length),
+                datasets: [{
+                    label: label,
+                    data: data,
+                    backgroundColor: ['rgba(75, 192, 192, 0.2)'],
+                    borderColor: ['rgb(75, 192, 192)'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        suggestedMax: maxVal
+                    }
+                }
+            },
+        });
+    }
+
+    function createChart2(ctx, type, data, label, x_axis=null) {
+        const maxVal = Math.max(15, ...data);
+        if (x_axis != null) {
+            x_labels = x_axis
+        } else {
+            x_labels = createArray(data.length)
+        }
+        new Chart(ctx, {
+            type: type,
+            data: {
+                labels: x_labels,
+                datasets: [{
+                    label: label,
+                    data: data,
+                    backgroundColor: data.map(value => isNaN(value) ? 'rgb(0, 128, 255)' : value >= 0 ? 'green' : 'red'),
+                    borderColor: data.map(value => isNaN(value) ? 'rgb(0, 128, 255)' : value >= 0 ? 'darkgreen' : 'darkred'),
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        suggestedMax: maxVal
+                    }
+                },
+                plugins: {
+                    annotation: {
+                        annotations: {
+                            line1: {
+                                type: 'line',
+                                yMin: 0,
+                                yMax: 0,
+                                borderColor: 'red',
+                                borderWidth: 2,
+                                borderDash: [5, 5], // Dashed line
+                                label: {
+                                    display: true,
+                                    content: 'Baseline (y = 0)',
+                                    position: 'end',
+                                    backgroundColor: 'rgba(255, 99, 132, 0.75)'
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+
+    fetch('roster.json')
+        .then(response => response.json())
+        .then(teamData => {
+
+            const yearlyStats = {};
+            teamData.Players.forEach(player => {
+                player.YearlySummary.forEach(summary => {
+                    const year = parseInt(summary.Year.split(" / ")[0]); // Extract start year
+                    if (!yearlyStats[year]) {
+                        yearlyStats[year] = { wins: 0, losses: 0, count: 0 };
+                    }
+                    yearlyStats[year].wins += summary.Wins;
+                    yearlyStats[year].losses += summary.Losses;
+                    yearlyStats[year].count += 1;
+                });
+            });
+
+            const years = Object.keys(yearlyStats).map(y => parseInt(y)).sort((a, b) => a - b);
+            const winRates = years.map(year => {
+                const stats = yearlyStats[year];
+                return stats.wins / (stats.wins + stats.losses);
+            });
+
+            // Predict next year's win rate using linear regression
+            function predictNextWinRate(years, winRates) {
+                if (years.length < 2) return winRates[winRates.length - 1]; // Not enough data for trend
+
+                // Compute linear regression (least squares method)
+                const n = years.length;
+                const sumX = years.reduce((a, b) => a + b, 0);
+                const sumY = winRates.reduce((a, b) => a + b, 0);
+                const sumXY = years.map((x, i) => x * winRates[i]).reduce((a, b) => a + b, 0);
+                const sumXX = years.map(x => x * x).reduce((a, b) => a + b, 0);
+
+                const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+                const intercept = (sumY - slope * sumX) / n;
+
+                const nextYear = years[years.length - 1] + 1;
+                return slope * nextYear + intercept;
+            }
+
+            const predictedWinRate = predictNextWinRate(years, winRates);
+            console.log(`Predicted Win Rate for Next Year: ${predictedWinRate.toFixed(2)}`);
+
+
+            const ctx = document.getElementById('chart5').getContext('2d');
+
+
+            function createSplitChart(ctx, previousData, projectedData, newData) {
+                const newYears = years
+                newYears.push("Future")
+                const lastPoint = previousData[previousData.length - 1];
+                const maxVal = Math.max(15, ...previousData);
+                new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: years,
+                datasets: [
+                    {
+                        label: "Team's data",
+                        data: [...previousData, NaN],
+                        borderColor: 'rgb(0, 128, 255)',
+                        backgroundColor: 'rgb(0, 128, 255)',
+                        borderWidth: 2,
+                        spanGaps: true
+                    },
+                    {
+                        label: "Without applicant",
+                        data: [
+                            ...Array(previousData.length - 1).fill(NaN),
+                            lastPoint, projectedData
+                        ],
+                        borderColor: 'rgb(0, 138, 255)',
+                        backgroundColor: 'rgb(0, 128, 255, 0.1)',
+                        borderWidth: 2,
+                        borderDash: [5, 5],
+                        spanGaps: true
+                    },
+                    {
+                        label: 'With applicant',
+                        data: [
+                            ...Array(previousData.length - 1).fill(NaN),
+                            lastPoint, newData
+                        ],
+                        borderColor: 'rgb(255, 0, 0)',
+                        backgroundColor: 'rgb(255, 0, 0, 0.1)',
+                        borderWidth: 2,
+                        spanGaps: true
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+            }
+            
+            var fencerPredictedWinRate
+            fetch('Chwonjnik_game_data.json')
+                .then(response => response.json())
+                .then(gameData => {
+                // Parse the fencer's yearly summary years
+                const fencerYears = gameData.YearlySummary
+                    .map(summary => parseInt(summary.Year.split(" / ")[0]))
+                    .sort((a, b) => a - b);
+                const fencerWinRates = gameData.YearlySummary.map(summary => 
+                    summary.Wins / (summary.Wins + summary.Losses)
+                );
+
+                fencerPredictedWinRate = predictNextWinRate(fencerYears, fencerWinRates);
+                console.log(`Fencer Predicted Win Rate for next year: ${fencerPredictedWinRate.toFixed(2)}`);
+                createSplitChart(ctx, winRates, predictNextWinRate(years, winRates), fencerPredictedWinRate)
+        
+                })
+                .catch(error => console.error("Error loading fencer game data:", error));
+
+            
+            
+
+        })
+        .catch(error => console.error('Error loading roster:', error));
+
+        
+        
+    
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,38 @@
+{
+    "FencerData": {
+        "FIE ID": "39558",
+        "Name": "CHWOJNIK Tamara"
+    },
+    "Competitions": [
+        {
+            "Year": "2020 / 2021",
+            "Competition": "World Cup",
+            "Link": "https://fie.org/competitions/2025/85",
+            "Wins": 20.0,
+            "Losses": 11.0,
+            "Difference": 9.0
+        },
+        {
+            "Year": "2021 / 2022",
+            "Competition": "World Cup",
+            "Link": "https://fie.org/competitions/2025/85",
+            "Wins": 30.0,
+            "Losses": 39.0,
+            "Difference": -9.0
+        }
+    ],
+    "YearlySummary": [
+        {
+            "Year": "2020 / 2021",
+            "Wins": 11.0,
+            "Losses": 12.0,
+            "Difference": -1.0
+        },
+        {
+            "Year": "2021 / 2022",
+            "Wins":31.0,
+            "Losses": 27.0,
+            "Difference": 4.0
+        }
+    ]
+}
