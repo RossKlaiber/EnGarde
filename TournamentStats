@@ -9,6 +9,8 @@ from selenium.webdriver.support.ui import Select, WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 import time
+import json
+
 
 def get_pdf_url(base_url):
     url = base_url.rstrip('/') + "/results/poolsResults/pdf?lang=en"
@@ -74,7 +76,7 @@ def extract_competitions_last_five_seasons(url):
         select = Select(dropdown_elem)
         season_text = select.options[i].text.strip()
         select.select_by_index(i)
-        time.sleep(3)
+        # time.sleep(3)
         
         html = driver.page_source
         soup = BeautifulSoup(html, 'html.parser')
@@ -98,7 +100,7 @@ def extract_competitions_last_five_seasons(url):
 
 # Main Execution
 if __name__ == "__main__":
-    url = 'https://fie.org/athletes/57573'
+    url = 'https://fie.org/athletes/48884'
     fencer_data = extract_fencer_data(url)
     name = fencer_data['Name']
     
@@ -114,7 +116,19 @@ if __name__ == "__main__":
     
     df_yearly_summary = df_competitions.groupby("Year")[["Wins", "Losses", "Difference"]].sum().reset_index()
     
-    print("\n Competitions DataFrame:")
-    display(df_competitions)
-    print("\nYearly Summary DataFrame:")
-    display(df_yearly_summary)
+    # Sort competitions and yearly summary in reverse chronological order (oldest first)
+    df_competitions = df_competitions.sort_values(by="Year", ascending=True)
+    df_yearly_summary = df_yearly_summary.sort_values(by="Year", ascending=True)
+
+    # Convert DataFrames to JSON
+    output_data = {
+        "FencerData": fencer_data,
+        "Competitions": df_competitions.to_dict(orient="records"),
+        "YearlySummary": df_yearly_summary.to_dict(orient="records")
+    }
+
+    # Save to a JSON file
+    with open("fencer_game_data.json", "w", encoding="utf-8") as json_file:
+        json.dump(output_data, json_file, indent=4)
+
+    print("Data has been saved to fencer_game_data.json")
