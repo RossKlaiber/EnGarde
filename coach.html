@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notre Dame Team</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            padding: 5px;
+            background: #ecf0f1;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="team-name"></h1>
+    <h2 id="coach-name"></h2>
+    <h3>Players:</h3>
+    <ul id="players-list"></ul>
+
+    <script>
+        const teamData = {
+            "Team Name": "Notre Dame",
+            "Coach name": "Robert Bornom",
+            "Players": [
+                { "Name": "Garyfallou Stavroula Myrsini", "FIE id": "52780" },
+                { "Name": "Ahmed Hesham", "FIE id": "52865" },
+                { "Name": "Yiyang Louise Liu", "FIE id": "61434" },
+                { "Name": "Eszter Muhari", "FIE id": "42192" }
+            ]
+        };
+
+        document.getElementById("team-name").innerText = `Team: ${teamData["Team Name"]}`;
+        document.getElementById("coach-name").innerText = `Coach: ${teamData["Coach name"]}`;
+
+        const playersList = document.getElementById("players-list");
+        teamData.Players.forEach(player => {
+            const li = document.createElement("li");
+            li.innerText = `${player.Name} (FIE ID: ${player["FIE id"]})`;
+            playersList.appendChild(li);
+        });
+    </script>
+</body>
+</html>
