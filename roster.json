@@ -1,0 +1,271 @@
+{
+    "Team Name": "Notre Dame",
+    "Coach name": "Robert Bornom",
+    "Players": [
+        {
+            "FencerData": {
+                "FIE Page": "https://fie.org/athletes/39558",
+                "FIE ID": "39558",
+                "Name": "CHWOJNIK Tamara",
+                "Flag": "ar",
+                "Handedness": "L",
+                "Age": "26",
+                "Image": "https://static.fie.org/uploads/8/41118-TAMARA%20CHWOJNIK.jpg",
+                "Weapon": "epee",
+                "Rank": "110",
+                "Residence": null,
+                "Points": null
+            },
+            "Competitions": [
+                {
+                    "Year": "2021 / 2022",
+                    "Competition": "Zone Championships",
+                    "Link": "https://fie.org/competitions/2022/797",
+                    "Wins": 0.0,
+                    "Losses": 0.0,
+                    "Difference": 0.0
+                },
+                {
+                    "Year": "2021 / 2022",
+                    "Competition": "Grand Prix",
+                    "Link": "https://fie.org/competitions/2022/449",
+                    "Wins": 20.0,
+                    "Losses": 17.0,
+                    "Difference": 3.0
+                },
+                {
+                    "Year": "2021 / 2022",
+                    "Competition": "World Cup",
+                    "Link": "https://fie.org/competitions/2022/85",
+                    "Wins": 22.0,
+                    "Losses": 23.0,
+                    "Difference": -1.0
+                },
+                {
+                    "Year": "2021 / 2022",
+                    "Competition": "World Cup",
+                    "Link": "https://fie.org/competitions/2022/80",
+                    "Wins": 23.0,
+                    "Losses": 26.0,
+                    "Difference": -3.0
+                },
+                {
+                    "Year": "2022 / 2023",
+                    "Competition": "World Cup",
+                    "Link": "https://fie.org/competitions/2023/85",
+                    "Wins": 26.0,
+                    "Losses": 24.0,
+                    "Difference": 2.0
+                },
+                {
+                    "Year": "2023 / 2024",
+                    "Competition": "Zone Championships",
+                    "Link": "https://fie.org/competitions/2024/797",
+                    "Wins": 18.0,
+                    "Losses": 14.0,
+                    "Difference": 4.0
+                },
+                {
+                    "Year": "2023 / 2024",
+                    "Competition": "Grand Prix",
+                    "Link": "https://fie.org/competitions/2024/449",
+                    "Wins": 24.0,
+                    "Losses": 22.0,
+                    "Difference": 2.0
+                },
+                {
+                    "Year": "2023 / 2024",
+                    "Competition": "World Cup",
+                    "Link": "https://fie.org/competitions/2024/85",
+                    "Wins": 28.0,
+                    "Losses": 23.0,
+                    "Difference": 5.0
+                },
+                {
+                    "Year": "2023 / 2024",
+                    "Competition": "World Cup",
+                    "Link": "https://fie.org/competitions/2024/80",
+                    "Wins": 17.0,
+                    "Losses": 26.0,
+                    "Difference": -9.0
+                },
+                {
+                    "Year": "2024 / 2025",
+                    "Competition": "World Cup",
+                    "Link": "https://fie.org/competitions/2025/85",
+                    "Wins": 18.0,
+                    "Losses": 27.0,
+                    "Difference": -9.0
+                }
+            ],
+            "YearlySummary": [
+                {
+                    "Year": "2021 / 2022",
+                    "Wins": 65.0,
+                    "Losses": 66.0,
+                    "Difference": -1.0
+                },
+                {
+                    "Year": "2022 / 2023",
+                    "Wins": 26.0,
+                    "Losses": 24.0,
+                    "Difference": 2.0
+                },
+                {
+                    "Year": "2023 / 2024",
+                    "Wins": 87.0,
+                    "Losses": 85.0,
+                    "Difference": 2.0
+                },
+                {
+                    "Year": "2024 / 2025",
+                    "Wins": 18.0,
+                    "Losses": 27.0,
+                    "Difference": -9.0
+                }
+            ]
+        },
+        {
+            "FencerData": {
+                "FIE Page": "https://fie.org/athletes/45940",
+                "FIE ID": "45940",
+                "Name": "VIZEU Victoria",
+                "Flag": "br",
+                "Handedness": "R",
+                "Age": "20",
+                "Image": "https://static.fie.org/uploads/18/93154-VIZEU-Victoria.jpg",
+                "Weapon": "epee",
+                "Rank": "66",
+                "Residence": null,
+                "Points": null
+            },
+            "Competitions": [
+                {
+                    "Year": "2020 / 2021",
+                    "Competition": "World Championship",
+                    "Link": "https://fie.org/competitions/2021/235",
+                    "Wins": 26.0,
+                    "Losses": 13.0,
+                    "Difference": 13.0
+                }
+            ],
+            "YearlySummary": [
+                {
+                    "Year": "2020 / 2021",
+                    "Wins": 26.0,
+                    "Losses": 13.0,
+                    "Difference": 13.0
+                }
+            ]
+        },
+        {
+            "FencerData": {
+                "FIE Page": "https://fie.org/athletes/48884",
+                "FIE ID": "48884",
+                "Name": "HUSSEIN Aya",
+                "Flag": "eg",
+                "Handedness": "R",
+                "Age": "21",
+                "Image": "https://static.fie.org/uploads/20/100971-%20%D8%B4%D8%B1%D9%8A%D9%81%20%D8%AD%D8%B3%D9%8A%D9%86.jpg",
+                "Weapon": "epee",
+                "Rank": "40",
+                "Residence": null,
+                "Points": null
+            },
+            "Competitions": [
+                {
+                    "Year": "2020 / 2021",
+                    "Competition": "World Championship",
+                    "Link": "https://fie.org/competitions/2021/223",
+                    "Wins": 24.0,
+                    "Losses": 19.0,
+                    "Difference": 5.0
+                },
+                {
+                    "Year": "2021 / 2022",
+                    "Competition": "World Championship",
+                    "Link": "https://fie.org/competitions/2022/223",
+                    "Wins": 27.0,
+                    "Losses": 19.0,
+                    "Difference": 8.0
+                },
+                {
+                    "Year": "2021 / 2022",
+                    "Competition": "Zone Championships",
+                    "Link": "https://fie.org/competitions/2022/855",
+                    "Wins": 19.0,
+                    "Losses": 11.0,
+                    "Difference": 8.0
+                },
+                {
+                    "Year": "2021 / 2022",
+                    "Competition": "World Cup",
+                    "Link": "https://fie.org/competitions/2022/9",
+                    "Wins": 29.0,
+                    "Losses": 17.0,
+                    "Difference": 12.0
+                },
+                {
+                    "Year": "2021 / 2022",
+                    "Competition": "World Cup",
+                    "Link": "https://fie.org/competitions/2022/13",
+                    "Wins": 23.0,
+                    "Losses": 26.0,
+                    "Difference": -3.0
+                },
+                {
+                    "Year": "2022 / 2023",
+                    "Competition": "World Championship",
+                    "Link": "https://fie.org/competitions/2023/223",
+                    "Wins": 23.0,
+                    "Losses": 12.0,
+                    "Difference": 11.0
+                },
+                {
+                    "Year": "2022 / 2023",
+                    "Competition": "Zone Championships",
+                    "Link": "https://fie.org/competitions/2023/855",
+                    "Wins": 25.0,
+                    "Losses": 10.0,
+                    "Difference": 15.0
+                },
+                {
+                    "Year": "2022 / 2023",
+                    "Competition": "World Cup",
+                    "Link": "https://fie.org/competitions/2023/11",
+                    "Wins": 28.0,
+                    "Losses": 17.0,
+                    "Difference": 11.0
+                },
+                {
+                    "Year": "2022 / 2023",
+                    "Competition": "World Cup",
+                    "Link": "https://fie.org/competitions/2023/1418",
+                    "Wins": 24.0,
+                    "Losses": 14.0,
+                    "Difference": 10.0
+                }
+            ],
+            "YearlySummary": [
+                {
+                    "Year": "2020 / 2021",
+                    "Wins": 24.0,
+                    "Losses": 19.0,
+                    "Difference": 5.0
+                },
+                {
+                    "Year": "2021 / 2022",
+                    "Wins": 98.0,
+                    "Losses": 73.0,
+                    "Difference": 25.0
+                },
+                {
+                    "Year": "2022 / 2023",
+                    "Wins": 100.0,
+                    "Losses": 53.0,
+                    "Difference": 47.0
+                }
+            ]
+        }
+    ]
+}
