@@ -9,6 +9,14 @@
             font-family: Arial, sans-serif;
             margin: 20px;
             padding: 20px;
+            display: flex;
+        }
+        .left-column, .right-column {
+            flex: 1;
+            padding: 20px;
+        }
+        .left-column {
+            border-right: 1px solid #ccc;
         }
         h1, h2 {
             color: #2c3e50;
@@ -18,17 +26,33 @@
             padding: 0;
         }
         li {
-            padding: 5px;
+            padding: 10px;
             background: #ecf0f1;
-            margin: 5px 0;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
         }
+        img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+       }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <h1 id="team-name"></h1>
-    <h2 id="coach-name"></h2>
-    <h3>Players:</h3>
-    <ul id="players-list"></ul>
+    <div class="left-column">
+        <h1 id="team-name"></h1>
+        <h2 id="coach-name"></h2>
+        <h3>Players:</h3>
+        <ul id="players-list"></ul>
+    </div>
+    <div class="right-column">
+        <h3>Team Performance</h3>
+        <canvas id="performance-chart"></canvas>
+    </div>
 
     <script>
         fetch('roster.json')
@@ -40,8 +64,63 @@
                 const playersList = document.getElementById("players-list");
                 teamData.Players.forEach(player => {
                     const li = document.createElement("li");
-                    li.innerText = `${player.Name} (FIE ID: ${player["FIE id"]})`;
-                    playersList.appendChild(li);
+                    li.onclick = () => window.location.href = 'index.html';
+                    const img = document.createElement("img");
+                    img.src = player.FencerData.Image;
+                    img.alt = player.FencerData.Name;
+                    const span = document.createElement("span");
+                    span.innerText = `${player.FencerData.Name} - ${player.FencerData.Weapon}`;
+                    li.appendChild(img);
+                    li.appendChild(span);
+                   playersList.appendChild(li);
+                });
+
+                const yearlyStats = {};
+                teamData.Players.forEach(player => {
+                    player.YearlySummary.forEach(summary => {
+                        const year = summary.Year;
+                        if (!yearlyStats[year]) {
+                            yearlyStats[year] = { wins: 0, losses: 0, count: 0 };
+                        }
+                        yearlyStats[year].wins += summary.Wins;
+                        yearlyStats[year].losses += summary.Losses;
+                        yearlyStats[year].count += 1;
+                    });
+                });
+
+                const years = Object.keys(yearlyStats).sort();
+                const winRates = years.map(year => {
+                    const stats = yearlyStats[year];
+                    return stats.wins / (stats.wins + stats.losses);
+                });
+
+                const ctx = document.getElementById('performance-chart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: years,
+                        datasets: [{
+                            label: 'Average Win Rate',
+                            data: winRates,
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 1,
+                                title: {
+                                    display: true,
+                                    text: 'Win Rate'
+                                }
+                            }
+                        }
+                    }
                 });
             })
             .catch(error => console.error('Error loading roster:', error));
