@@ -95,18 +95,19 @@
             document.getElementById('flag-div').innerHTML = "<span class='fi fi-" + data["Flag"] + "'></span>"
 
             const fieLink = document.getElementById("fie-link").querySelector("a");
-            if (data['FIE Page']) {
-                fieLink.href = data['FIE Page'];
-                fieLink.textContent = "FIE Profile";
-                fieLink.target = "_blank"
-            } else {
-                fieLink.textContent = "N/A";
-                fieLink.removeAttribute("href");
-            }
+            fieLink.href = data['FIE Page'];
+            fieLink.textContent = "FIE Profile";
+            fieLink.target = "_blank"
 
-            createChart(document.getElementById('chart1'), 'line', [7, 7, 9, 10], 'Wins');
-            createChart(document.getElementById('chart2'), 'line', [5, 6, 7, 8], 'Losses');
-            createChart(document.getElementById('chart3'), 'line', [3, 5, 2, 6], 'Points');
+            const gameDataResponse = await fetch('fencer_game_data.json');
+            const gameData = await gameDataResponse.json();
+            const wins = gameData.Competitions.map(comp => comp.Wins);
+            const losses = gameData.Competitions.map(comp => comp.Losses);
+            const differences = gameData.Competitions.map(comp => comp.Difference);
+
+            createChart(document.getElementById('chart1'), 'line', wins, 'Wins');
+            createChart(document.getElementById('chart2'), 'line', losses, 'Losses');
+            createChart(document.getElementById('chart3'), 'line', differences, 'Points');
             createSplitChart(document.getElementById('chart4'), [2, 4, 6, 8], 10, 6);
 
             if (data['Image']) {
