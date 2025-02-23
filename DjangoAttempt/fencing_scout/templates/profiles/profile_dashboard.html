@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Profile Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.js"></script>
+  <style>
+    .chart-container {
+      width: 100%;
+      height: 250px;
+    }
+  </style>
+</head>
+<body class="bg-light">
+<div class="container mt-4">
+  <div class="card p-4">
+    <div class="row">
+      <div class="col-md-8">
+        <h3 id="profile-name">Athlete Name</h3>
+        <p id="profile-location" class="text-muted">Location</p>
+        <div id="flag-div"></div>
+      </div>
+      <div class="col-md-4 text-end">
+        <img src="profile-placeholder.png" alt="Profile Pic" class="rounded-circle" width="70">
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-md-6">
+        <p><strong>Sport:</strong> <span id="sport">N/A</span></p>
+      </div>
+      <div class="col-md-6">
+        <p><strong>Team:</strong> <span id="team">N/A</span></p>
+      </div>
+      <div class="col-md-6">
+        <p><strong>Ranking:</strong> <span id="ranking">N/A</span></p>
+      </div>
+      <div class="col-md-6">
+        <p><strong>Age:</strong> <span id="age">N/A</span></p>
+      </div>
+      <div class="col-md-12">
+        <p><strong>Bio:</strong> <span id="bio">N/A</span></p>
+      </div>
+    </div>
+    <hr>
+    <h5>Performance Data</h5>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="card p-2 text-center chart-container">
+          <canvas id="chart1"></canvas>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card p-2 text-center chart-container">
+          <canvas id="chart2"></canvas>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card p-2 text-center chart-container">
+          <canvas id="chart3"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="mt-4">
+      <h6>Overall Progress</h6>
+      <div class="card p-3 text-center chart-container">
+        <canvas id="chart4"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  async function loadAthleteData() {
+    try {
+      const response = await fetch('athlete_data.json');
+      const data = await response.json();
+
+      document.getElementById('profile-name').textContent = data['Name'] || 'Unknown Athlete';
+      document.getElementById('profile-location').textContent = data['Location'] || 'N/A';
+      document.getElementById('age').textContent = data['Age'] || 'N/A';
+      document.getElementById('bio').textContent = data['Bio'] || 'N/A';
+      document.getElementById('sport').textContent = data['Sport'] || 'N/A';
+      document.getElementById('team').textContent = data['Team'] || 'N/A';
+      document.getElementById('ranking').textContent = data['Ranking'] || 'N/A';
+      document.getElementById('flag-div').innerHTML = data["Flag"] ? "<span class='fi fi-" + data["Flag"] + "'></span>" : "";
+      
+      if (data['Image']) {
+        document.querySelector("img.rounded-circle").src = data['Image'];
+      }
+      
+      // Create charts using data from JSON or default values
+      createChart(document.getElementById('chart1'), 'line', data['PerformanceChart1'] || [7, 7, 9, 10], 'Performance 1');
+      createChart(document.getElementById('chart2'), 'line', data['PerformanceChart2'] || [5, 6, 7, 8], 'Performance 2');
+      createChart(document.getElementById('chart3'), 'line', data['PerformanceChart3'] || [3, 5, 2, 6], 'Performance 3');
+      createSplitChart(document.getElementById('chart4'), data['OverallProgress']?.previous || [2, 4, 6, 8], data['OverallProgress']?.projected || 10, data['OverallProgress']?.new || 6);
+    } catch (error) {
+      console.error("Error loading athlete data:", error);
+    }
+  }
+  window.onload = loadAthleteData;
+
+  const createArray = (n) => Array.from({ length: n }, (_, i) => i + 1);
+  
+  function createChart(ctx, type, data, label) {
+    const maxVal = Math.max(15, ...data);
+    new Chart(ctx, {
+      type: type,
+      data: {
+        labels: createArray(data.length),
+        datasets: [{
+          label: label,
+          data: data,
+          backgroundColor: ['rgba(75, 192, 192, 0.2)'],
+          borderColor: ['rgb(75, 192, 192)'],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true,
+            suggestedMax: maxVal
+          }
+        }
+      }
+    });
+  }
+  
+  function createSplitChart(ctx, previousData, projectedData, newData) {
+    const labels = createArray(previousData.length + 1);
+    const lastPoint = previousData[previousData.length - 1];
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Main Line',
+            data: [...previousData, NaN],
+            borderColor: 'rgb(0, 128, 255)',
+            backgroundColor: 'rgb(0, 128, 255)',
+            borderWidth: 2,
+            spanGaps: true
+          },
+          {
+            label: 'Dotted Upward',
+            data: [
+              ...Array(previousData.length - 1).fill(NaN),
+              lastPoint, projectedData
+            ],
+            borderColor: 'rgb(0, 138, 255)',
+            backgroundColor: 'rgba(0, 128, 255, 0.1)',
+            borderWidth: 2,
+            borderDash: [5, 5],
+            spanGaps: true
+          },
+          {
+            label: 'Solid Downward',
+            data: [
+              ...Array(previousData.length - 1).fill(NaN),
+              lastPoint, newData
+            ],
+            borderColor: 'rgb(255, 0, 0)',
+            backgroundColor: 'rgba(255, 0, 0, 0.1)',
+            borderWidth: 2,
+            spanGaps: true
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false
+      }
+    });
+  }
+</script>
+</body>
+</html>

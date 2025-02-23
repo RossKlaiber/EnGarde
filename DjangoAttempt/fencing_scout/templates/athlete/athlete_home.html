@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!-- Chart.js must be loaded before any JavaScript that uses it -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<div class="container mt-4">
+    <div class="card p-4">
+        <div class="row">
+            <div class="col-md-8">
+                <h3 id="profile-name">{{ profile.name|default:"Unknown" }}</h3>
+                <p id="profile-location" class="text-muted">{{ profile.residence|default:"N/A" }}</p>
+                <div id="flag-div">
+                    {% if profile.flag %}
+                        <span class="fi fi-{{ profile.flag }}"></span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-4 text-end">
+                <img src="{% if profile.image %}{{ profile.image.url }}{% else %}{% static 'profile-placeholder.png' %}{% endif %}" 
+                     alt="Profile Pic" class="rounded-circle" width="70">
+            </div>
+        </div>
+
+        <hr>
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>FIE Link:</strong> 
+                    <a href="{{ profile.FIE_page }}" target="_blank">
+                        FIE Profile
+                    </a>
+                </p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Handedness:</strong> {{ profile.handedness|default:"N/A" }}</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>FIE Rank:</strong> {{ profile.rank|default:"N/A" }}</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Age:</strong> {{ profile.age|default:"N/A" }}</p>
+            </div>
+            <div class="col-md-12">
+                <p><strong>Weapon:</strong> {{ profile.weapon|default:"N/A" }}</p>
+            </div>
+        </div>
+
+        <hr>
+        <h5>Competition Data</h5>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card p-2 text-center chart-container">
+                    <canvas id="chart1"></canvas>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card p-2 text-center chart-container">
+                    <canvas id="chart2"></canvas>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card p-2 text-center chart-container">
+                    <canvas id="chart3"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <p></p>
+
+        <div class="mt-4">
+            <h6>Overall Progress</h6>
+            <div class="card p-3 text-center chart-container">
+                <canvas id="chart4"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Embed Data in JavaScript -->
+<script>
+    // Extract data directly from Django template
+    const wins = [{% for comp in profile.competitions_data %}{% if not forloop.last %}{{ comp.Wins }},{% else %}{{ comp.Wins }}{% endif %}{% endfor %}];
+    const losses = [{% for comp in profile.competitions_data %}{% if not forloop.last %}{{ comp.Losses }},{% else %}{{ comp.Losses }}{% endif %}{% endfor %}];
+    const differences = [{% for comp in profile.competitions_data %}{% if not forloop.last %}{{ comp.Difference }},{% else %}{{ comp.Difference }}{% endif %}{% endfor %}];
+
+    const annuals = [{% for item in profile.yearly_summary_data %}{% if not forloop.last %}{{ item.Difference }},{% else %}{{ item.Difference }}{% endif %}{% endfor %}];
+    const annualNames = [{% for item in profile.yearly_summary_data %}{% if not forloop.last %}"{{ item.Year }}",{% else %}"{{ item.Year }}"{% endif %}{% endfor %}];
+
+    function createChart(ctx, type, data, label) {
+        new Chart(ctx, {
+            type: type,
+            data: {
+                labels: [...Array(data.length).keys()].map(i => i + 1),
+                datasets: [{
+                    label: label,
+                    data: data,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgb(75, 192, 192)',
+                    borderWidth: 1
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+    }
+
+    function createChart2(ctx, type, data, label, x_axis = null) {
+        new Chart(ctx, {
+            type: type,
+            data: {
+                labels: x_axis || [...Array(data.length).keys()].map(i => i + 1),
+                datasets: [{
+                    label: label,
+                    data: data,
+                    backgroundColor: data.map(value => value >= 0 ? 'green' : 'red'),
+                    borderColor: data.map(value => value >= 0 ? 'darkgreen' : 'darkred'),
+                    borderWidth: 1
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+    }
+
+    createChart(document.getElementById('chart1'), 'line', wins, 'Wins');
+    createChart(document.getElementById('chart2'), 'line', losses, 'Losses');
+    createChart2(document.getElementById('chart3'), 'line', differences, 'Differential');
+    createChart2(document.getElementById('chart4'), 'line', annuals, 'Overall Differential', annualNames);
+</script>
+
+{% endblock content %}

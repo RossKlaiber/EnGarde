@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card p-4">
+        <h3>Create Your Profile</h3>
+        <form method="POST">
+            {% csrf_token %}
+
+            <label for="username">Username:</label>
+            <input type="text" name="username" class="form-control" required>
+
+            <label for="email">Email:</label>
+            <input type="email" name="email" class="form-control" required>
+
+            <label for="password">Password:</label>
+            <input type="password" name="password" class="form-control" required>
+
+            <label>Sign up as:</label>
+            <div class="btn-group w-100">
+                <button type="button" class="btn btn-outline-primary user-type-btn" id="athlete-btn" onclick="setUserType('athlete')">Athlete</button>
+                <button type="button" class="btn btn-outline-primary user-type-btn" id="recruiter-btn" onclick="setUserType('recruiter')">Recruiter</button>
+            </div>
+            <input type="hidden" name="user_type" id="user-type-input" value="athlete">
+
+            <!-- ✅ FIE Link is always visible but only used for athletes -->
+            <div id="fie-link-container">
+                <label for="fie_link">FIE Link (optional, required for Athletes):</label>
+                <input type="url" name="fie_link" class="form-control">
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 mt-3">Sign Up</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function setUserType(type) {
+        document.getElementById('user-type-input').value = type;
+        document.getElementById('athlete-btn').classList.remove('active');
+        document.getElementById('recruiter-btn').classList.remove('active');
+        document.getElementById(type + '-btn').classList.add('active');
+    }
+</script>
+{% endblock %}

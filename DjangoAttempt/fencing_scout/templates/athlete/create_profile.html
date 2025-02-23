@@ -1,0 +1,52 @@
+2
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fencer Profile Creation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Position the logo in the top-left corner */
+        .logo {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 150px; /* Adjust size if needed */
+        }
+        /* Shift the body content down to make room for the logo */
+        body {
+            padding-top: 120px; /* Push everything down by 120px to make room for the logo */
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <!-- Logo Image -->
+    <img src="{% static 'Images/logo_2.jpg' %}" alt="Logo" class="logo">
+    <div class="container mt-4">
+        <div class="card p-4">
+            <h3>Create Your Profile</h3>
+            <form id="profileForm" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="fencer-name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="fencer-name" name="fencer_name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="fie-link" class="form-label">FIE Link</label>
+                    <input type="url" class="form-control" id="fie-link" name="fie_link" required>
+                </div>
+                <div class="mb-3">
+                    <label for="bio" class="form-label">Short Bio</label>
+                    <textarea class="form-control" id="bio" name="bio" rows="3" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="video-upload" class="form-label">Upload Video</label>
+                    <input type="file" class="form-control" id="video-upload" name="video_upload" accept="video/*">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
