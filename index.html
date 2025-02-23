@@ -104,11 +104,12 @@
             const wins = gameData.Competitions.map(comp => comp.Wins);
             const losses = gameData.Competitions.map(comp => comp.Losses);
             const differences = gameData.Competitions.map(comp => comp.Difference);
+            const annuals = gameData.YearlySummary.map(comp => comp.Difference);
 
             createChart(document.getElementById('chart1'), 'line', wins, 'Wins');
             createChart(document.getElementById('chart2'), 'line', losses, 'Losses');
-            createChart(document.getElementById('chart3'), 'line', differences, 'Points');
-            createSplitChart(document.getElementById('chart4'), [2, 4, 6, 8], 10, 6);
+            createChart2(document.getElementById('chart3'), 'line', differences, 'Differential');
+            createChart2(document.getElementById('chart4'), 'line', annuals, 'Differential');
 
             if (data['Image']) {
                 document.querySelector("img.rounded-circle").src = data['Image'];
@@ -146,58 +147,58 @@
                         suggestedMax: maxVal
                     }
                 }
-            }
+            },
         });
     }
 
-    function createSplitChart(ctx, previousData, projectedData, newData) {
-        const labels = createArray(previousData.length + 1);
-        const lastPoint = previousData[previousData.length - 1];
+    function createChart2(ctx, type, data, label) {
+        const maxVal = Math.max(15, ...data);
 
         new Chart(ctx, {
-            type: 'line',
+            type: type,
             data: {
-                labels: labels,
-                datasets: [
-                    {
-                        label: 'Main Line',
-                        data: [...previousData, NaN],
-                        borderColor: 'rgb(0, 128, 255)',
-                        backgroundColor: 'rgb(0, 128, 255)',
-                        borderWidth: 2,
-                        spanGaps: true
-                    },
-                    {
-                        label: 'Dotted Upward',
-                        data: [
-                            ...Array(previousData.length - 1).fill(NaN),
-                            lastPoint, projectedData
-                        ],
-                        borderColor: 'rgb(0, 138, 255)',
-                        backgroundColor: 'rgb(0, 128, 255, 0.1)',
-                        borderWidth: 2,
-                        borderDash: [5, 5],
-                        spanGaps: true
-                    },
-                    {
-                        label: 'Solid Downward',
-                        data: [
-                            ...Array(previousData.length - 1).fill(NaN),
-                            lastPoint, newData
-                        ],
-                        borderColor: 'rgb(255, 0, 0)',
-                        backgroundColor: 'rgb(255, 0, 0, 0.1)',
-                        borderWidth: 2,
-                        spanGaps: true
-                    }
-                ]
+                labels: Array.from({ length: data.length }, (_, i) => i + 1),
+                datasets: [{
+                    label: label,
+                    data: data,
+                    backgroundColor: data.map(value => isNaN(value) ? 'rgb(0, 128, 255)' : value >= 0 ? 'green' : 'red'),
+                    borderColor: data.map(value => isNaN(value) ? 'rgb(0, 128, 255)' : value >= 0 ? 'darkgreen' : 'darkred'),
+                    borderWidth: 1
+                }]
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        suggestedMax: maxVal
+                    }
+                },
+                plugins: {
+                    annotation: {
+                        annotations: {
+                            line1: {
+                                type: 'line',
+                                yMin: 0,
+                                yMax: 0,
+                                borderColor: 'red',
+                                borderWidth: 2,
+                                borderDash: [5, 5], // Dashed line
+                                label: {
+                                    display: true,
+                                    content: 'Baseline (y = 0)',
+                                    position: 'end',
+                                    backgroundColor: 'rgba(255, 99, 132, 0.75)'
+                                }
+                            }
+                        }
+                    }
+                }
             }
         });
     }
+
 </script>
 
 </body>
