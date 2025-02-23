@@ -1,0 +1,120 @@
+import requests
+import pandas as pd
+import PyPDF2
+import io
+import re
+from bs4 import BeautifulSoup
+from selenium import webdriver
+from selenium.webdriver.support.ui import Select, WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+import time
+
+def get_pdf_url(base_url):
+    url = base_url.rstrip('/') + "/results/poolsResults/pdf?lang=en"
+    if "competitions" in url:
+        return url.replace("competitions", "competition")
+    return url
+
+def download_and_extract_row(pdf_url, name):
+    try:
+        response = requests.get(pdf_url)
+        if response.status_code != 200:
+            print(f"Failed to access PDF: {pdf_url}, trying alternative URL")
+            alternative_url = pdf_url.replace("competitions", "competition")
+            response = requests.get(alternative_url)
+            if response.status_code != 200:
+                print(f"Alternative URL also failed: {alternative_url}")
+                return 0, 0, 0  # Default if PDF is inaccessible
+
+        with io.BytesIO(response.content) as open_pdf:
+            reader = PyPDF2.PdfReader(open_pdf)
+            text = "\n".join([page.extract_text() for page in reader.pages if page.extract_text()])
+            
+            if name not in text:
+                return 0, 0, 0  # Assign 0 if name not found
+
+            lines = text.split("\n")
+            for i, line in enumerate(lines):
+                if name in line:
+                    surrounding_lines = lines[i:i+10]
+                    extracted_info = " ".join(surrounding_lines)
+                    numbers = re.findall(r'\d+', extracted_info)
+                    
+                    if len(numbers) >= 3:
+                        return int(numbers[3]), int(numbers[4]), int(numbers[3])-int(numbers[4])
+    
+    except Exception as e:
+        print(f"Error processing PDF {pdf_url}: {e}")
+    
+    return 0, 0, 0  # Default if no valid data found
+
+def extract_fencer_data(url):
+    response = requests.get(url)
+    soup = BeautifulSoup(response.content, 'html.parser')
+    
+    data = {'FIE ID': url.rstrip('/').split('/')[-1]}
+    name_tag = soup.find('h1', class_='AthleteHero-fencerName')
+    data['Name'] = name_tag.get_text(strip=True) if name_tag else None
+    
+    return data
+
+def extract_competitions_last_five_seasons(url):
+    driver = webdriver.Chrome()
+    wait = WebDriverWait(driver, 10)
+    driver.get(url)
+    
+    competitions_list = []
+    dropdown_elem = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "select.js-season-dropdown")))
+    select = Select(dropdown_elem)
+    num_options = min(5, len(select.options))
+    
+    for i in range(num_options):
+        dropdown_elem = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "select.js-season-dropdown")))
+        select = Select(dropdown_elem)
+        season_text = select.options[i].text.strip()
+        select.select_by_index(i)
+        time.sleep(3)
+        
+        html = driver.page_source
+        soup = BeautifulSoup(html, 'html.parser')
+        results_container = soup.find('div', class_='js-athlete-results-tab-container')
+        if results_container:
+            links = results_container.find_all('a', class_='Historial-link')
+            for link in links:
+                href = link.get('href')
+                if href and href.startswith('/'):
+                    href = 'https://fie.org' + href
+                competition_name_div = link.find("div", class_="Historial-label Historial-label--colorDark")
+                competition_name = competition_name_div.get_text(strip=True) if competition_name_div else ""
+                competitions_list.append({
+                    "Year": season_text,
+                    "Competition": competition_name,
+                    "Link": href
+                })
+    
+    driver.quit()
+    return competitions_list
+
+# Main Execution
+if __name__ == "__main__":
+    url = 'https://fie.org/athletes/57573'
+    fencer_data = extract_fencer_data(url)
+    name = fencer_data['Name']
+    
+    competitions_data = extract_competitions_last_five_seasons(url)
+    df_competitions = pd.DataFrame(competitions_data, columns=["Year", "Competition", "Link"])
+    
+    for index, row in df_competitions.iterrows():
+        pdf_url = get_pdf_url(row["Link"])
+        wins, losses, diff = download_and_extract_row(pdf_url, name)
+        df_competitions.at[index, "Wins"] = wins
+        df_competitions.at[index, "Losses"] = losses
+        df_competitions.at[index, "Difference"] = diff
+    
+    df_yearly_summary = df_competitions.groupby("Year")[["Wins", "Losses", "Difference"]].sum().reset_index()
+    
+    print("\n Competitions DataFrame:")
+    display(df_competitions)
+    print("\nYearly Summary DataFrame:")
+    display(df_yearly_summary)
