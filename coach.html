@@ -31,26 +31,20 @@
     <ul id="players-list"></ul>
 
     <script>
-        const teamData = {
-            "Team Name": "Notre Dame",
-            "Coach name": "Robert Bornom",
-            "Players": [
-                { "Name": "Garyfallou Stavroula Myrsini", "FIE id": "52780" },
-                { "Name": "Ahmed Hesham", "FIE id": "52865" },
-                { "Name": "Yiyang Louise Liu", "FIE id": "61434" },
-                { "Name": "Eszter Muhari", "FIE id": "42192" }
-            ]
-        };
+        fetch('roster.json')
+            .then(response => response.json())
+            .then(teamData => {
+                document.getElementById("team-name").innerText = `Team: ${teamData["Team Name"]}`;
+                document.getElementById("coach-name").innerText = `Coach: ${teamData["Coach name"]}`;
 
-        document.getElementById("team-name").innerText = `Team: ${teamData["Team Name"]}`;
-        document.getElementById("coach-name").innerText = `Coach: ${teamData["Coach name"]}`;
-
-        const playersList = document.getElementById("players-list");
-        teamData.Players.forEach(player => {
-            const li = document.createElement("li");
-            li.innerText = `${player.Name} (FIE ID: ${player["FIE id"]})`;
-            playersList.appendChild(li);
-        });
+                const playersList = document.getElementById("players-list");
+                teamData.Players.forEach(player => {
+                    const li = document.createElement("li");
+                    li.innerText = `${player.Name} (FIE ID: ${player["FIE id"]})`;
+                    playersList.appendChild(li);
+                });
+            })
+            .catch(error => console.error('Error loading roster:', error));
     </script>
 </body>
 </html>
