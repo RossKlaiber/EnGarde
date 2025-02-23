@@ -81,15 +81,17 @@
 </div>
 
 <script>
+    function titleCase(s) {return s.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');}
+
     async function loadFencerData() {
         try {
             const response = await fetch('fencer_data.json');
             const data = await response.json();
 
-            document.getElementById('profile-name').textContent = data['Name'] || 'Unknown';
+            document.getElementById('profile-name').textContent = titleCase(data['Name']) || 'Unknown';
             document.getElementById('fie-rank').textContent = data['Rank'] || 'N/A';
-            document.getElementById('weapon').textContent = data['Weapon'] || 'N/A';
-            document.getElementById('profile-location').textContent = data['Residence'] || 'N/A';
+            document.getElementById('weapon').textContent = titleCase(data['Weapon']) || 'N/A';
+            document.getElementById('profile-location').textContent = data['Residence'] || '';
             document.getElementById('handedness').textContent = data['Handedness'] || 'N/A';
             document.getElementById('age').textContent = data['Age'] || 'N/A';
             document.getElementById('flag-div').innerHTML = "<span class='fi fi-" + data["Flag"] + "'></span>"
