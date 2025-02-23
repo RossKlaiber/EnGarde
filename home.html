@@ -2,10 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>En Garde - Home</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fencer Profile Creation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        /* Position the logo in the top-left corner */
+        .logo {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 150px; /* Adjust size if needed */
+        }
+        /* Shift the body content down to make room for the logo */
+        
         .navbar {
             width: 100%;
             background-color: #2c3e50;
@@ -14,102 +23,94 @@
             justify-content: center;
             padding: 10px 0;
         }
-
         .navbar a {
             color: white;
             text-decoration: none;
             padding: 14px 20px;
             font-size: 18px;
         }
-
         .logo {
-            height: 200px; /* Reduced size */
-            width: 200px;  /* Reduced size */
-            max-width: 100%;
-            height: auto;
-        }
-
-        .image {
-            display: flex;
-            justify-content: center;
-            margin-top: 10px;
-        }
-
-        .container {
-            padding-left: 50px; /* Moves content slightly to the right */
-            max-width: 90%; /* Keeps content from stretching too far */
-        }
-
-        .section-title {
-            margin-top: 20px;
-            font-weight: bold;
+            height: 50px;
+            width: 50px;
+            radius: 50%;
         }
     </style>
 </head>
-<body>
+<body class="bg-light">
+
     <div class="navbar">
-        <a href="home.html">Home</a>
-        <a href="athletePage.html">Create Athlete Profile</a>
-        <a href="coach_roster.html">Coach Roster</a>
-        <a href="Coach.html">View Team</a>  
+        <a href="http://127.0.0.1:5500/home.html">Home</a>
+        <a href="http://127.0.0.1:5500/athletePage.html">Create Athlete Profile</a>
+        <a href="http://127.0.0.1:5500/coach_roster.html">Coach Roster</a>
+        <a href="http://127.0.0.1:5500/Coach.html">View Team</a>  
     </div>
 
-    <div class="image">
-        <img src="logo_2.jpg" class="logo">
+    <!-- Logo Image -->
+
+    <div class="container mt-4">
+        <div class="card p-4">
+            <h3>Create Your Profile</h3>
+            <form id="profileForm">
+                <div class="mb-3">
+                    <label for="fencer-name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="fencer-name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="fie-link" class="form-label">FIE Link</label>
+                    <input type="url" class="form-control" id="fie-link" required>
+                </div>
+                <div class="mb-3">
+                    <label for="bio" class="form-label">Short Bio</label>
+                    <textarea class="form-control" id="bio" rows="3" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="video-upload" class="form-label">Upload Video</label>
+                    <input type="file" class="form-control" id="video-upload" accept="video/*" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
     </div>
 
-    <div class="container mt-5">
-        <h2 class="section-title">🏆 Project Inspiration</h2>
-        <p>This project was inspired by Ira Pathak, a top-ranked fencer who faced significant challenges navigating the college recruiting process. Our platform aims to eliminate these barriers for international athletes, ensuring equal opportunities to showcase their talent.</p>
-    
-        <h2 class="section-title">🌟 What It Does</h2>
-        <ul>
-            <li>🔹 <strong>Gives Athletes Exposure 📢</strong> – Players can showcase their skills, stats, and practice tapes to recruiters in a structured, professional format.</li>
-            <li>🔹 <strong>Organizes Recruitment 🎯</strong> – Coaches receive a centralized platform to evaluate, manage, and connect with athletes efficiently.</li>
-            <li>🔹 <strong>Provides Statistical Data 📊</strong> – Advanced analytics & insights help measure a player’s impact on a team, making scouting more data-driven.</li>
-        </ul>
-    
-        <h2 class="section-title">🛠️ How We Built It</h2>
-        <ul>
-            <li>🔹 Frontend: HTML, CSS, Bootstrap</li>
-            <li>🔹 Backend: Python, JavaScript</li>
-            <li>🔹 Frameworks & Libraries: Django, Selenium, BeautifulSoup, Chart.js</li>
-        </ul>
-    
-        <h2 class="section-title">🔍 Key Technologies Used:</h2>
-        <ul>
-            <li>📌 <strong>Django</strong> – Manages data and user authentication</li>
-            <li>📌 <strong>Selenium</strong> – Automates recruitment processes</li>
-            <li>📌 <strong>BeautifulSoup</strong> – Extracts athlete stats from websites</li>
-            <li>📌 <strong>Chart.js</strong> – Displays performance trends visually</li>
-        </ul>
-    
-        <h2 class="section-title">⚡ Challenges We Faced</h2>
-        <ul>
-            <li>🧐 Defining our problem space – Ensuring we solved a real, pressing issue.</li>
-            <li>💾 Scraping inconsistent data – Navigating the complexities of FIE website structures.</li>
-            <li>⏳ Managing workloads – Balancing responsibilities within a fast-paced team.</li>
-        </ul>
-    
-        <h2 class="section-title">✅ How We Overcame Them:</h2>
-        <p>Strong teamwork, adaptability, and leveraging advanced data-processing tools.</p>
-    
-        <h2 class="section-title">🏅 Accomplishments</h2>
-        <ul>
-            <li>✔ Successfully scraped fencing data for athlete profiles.</li>
-            <li>✔ Applied new libraries to enhance performance tracking.</li>
-            <li>✔ Built a one-of-a-kind solution—with no direct competitors!</li>
-        </ul>
-    
-        <h2 class="section-title">🚀 What’s Next?</h2>
-        <ul>
-            <li>🎾 Expanding to other sports – Tennis, wrestling, and more!</li>
-            <li>📈 Developing advanced stats – Metrics like xW (expected wins) & bWAR (bouts won above replacement).</li>
-            <li>🌍 Empowering underrepresented athletes – Ensuring global exposure and college opportunities for all.</li>
-        </ul>
-        
-        <h2 class="section-title">📑 Pitch Deck:</h2>
-        <p><a href="https://docs.google.com/presentation/d/10Gmd_RV4oiTbaZI7XSYK-t1qPS2BhOv9l6ziT81mmbw/edit#slide=id.g33917df5030_0_589" target="_blank">View the full pitch deck</a></p>
-    </div>
+<script>
+    document.getElementById('profileForm').addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        const fencerName = document.getElementById('fencer-name').value;
+        const fieLink = document.getElementById('fie-link').value;
+        const bio = document.getElementById('bio').value;
+        const videoFile = document.getElementById('video-upload').files[0];
+
+        if (!fencerName || !fieLink || !bio || !videoFile) {
+            alert("Please fill out all fields!");
+            return;
+        }
+
+        // Create a JSON object from the form data
+        const profileData = {
+            fencerName: fencerName,
+            fieLink: fieLink,
+            bio: bio,
+            videoFileName: videoFile.name,  // Save just the name of the video
+        };
+
+        // Convert the object to a JSON string
+        const jsonData = JSON.stringify(profileData, null, 2);
+
+        // Create a Blob with the JSON data
+        const blob = new Blob([jsonData], { type: 'application/json' });
+
+
+        // Create a link element for downloading the JSON file
+        // const link = document.createElement('a');
+        // link.href = URL.createObjectURL(blob);
+        // link.download = 'fencerProfile.json';  // Name of the downloaded file
+
+        // Simulate a click on the link to trigger the download
+        // link.click();
+        window.location.href = 'home.html';
+    });
+</script>
+
 </body>
 </html>
