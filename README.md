@@ -1,12 +1,15 @@
 # EnGarde
 Ira, Ross, Gauri, and Aaron Hacklytics 2025
-** # HackGt11Project
 
 ## Devpost Submission
 (https://devpost.com/software/en-guarde)
 
 ## Inspiration
-Inspired by College Football 25 Franchise Mode Recruiting Portal, Dating Apps, and the Common Application, we build a portal that helps connect players to coaches. 
+The inspiration of this project comes from one of our members, Ira Pathak. During the 2023-2024 year, she was ranked 394th in the world for senior division (up to 35 years old) epee representing India. Despite being a quality player, she found the recruiting process for collegiate fencing difficult to navigate. Not being well connected, she fell behind on recruiting. A notable example was when Columbia had already recruited the incoming 2024-2025 fencing class two years prior.
+
+In general, most international fencers on US fencing collegiate teams studied at international schools in well established fencing circuits and scouting networks helped them stand out. This means that thousands of athletes from other countries fall behind.
+
+The design of this app is inspired by College Football 25 Franchise Mode Recruiting Portal, Dating Apps, and the Common Application, we build a portal that helps connect players to coaches.
 
 
 ## What it does
@@ -18,7 +21,7 @@ Coaches get a unified system to organize their recruitment. Instead of having to
 
 **Provide Statistical Data**
 
-Coaches also get to see charts that 
+Coaches also get to see analytical that help measure a player's potential impact on the program.
 
 Link to the pitch deck : (https://docs.google.com/presentation/d/10Gmd_RV4oiTbaZI7XSYK-t1qPS2BhOv9l6ziT81mmbw/edit#slide=id.g33917df5030_0_589)
 
