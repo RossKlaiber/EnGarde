@@ -5,11 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>College Coach Roster</title>
     <style>
+        .logo {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 150px;
+            border: #444;
+        }
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #ffb6c1, #ff8c00);
+            background: #eeeeed;
             margin: 0;
-            padding: 0;
+            padding-top: 130px;
         }
         .container {
             max-width: 600px;
@@ -25,7 +32,7 @@
             transform: translateY(-10px);
         }
         h2 {
-            color: #ff6347;
+            color: rgb(78, 78, 236);
             font-size: 36px;
             margin-bottom: 30px;
             font-weight: bold;
@@ -43,7 +50,7 @@
             border-radius: 5px;
         }
         button {
-            background-color: #007bff;
+            background-color: #2e8cf1;
             color: white;
             border: none;
             cursor: pointer;
@@ -58,8 +65,9 @@
     </style>
 </head>
 <body>
+    <img src="Images/logo_2.jpg" alt="Logo" class="logo">
     <div class="container">
-        <h2>College Coach Portal</h2>
+        <h2>Recruiter Portal</h2>
         
         <label for="collegeName">Enter College Name:</label>
         <input type="text" id="collegeName" placeholder="College Name">
@@ -98,23 +106,13 @@
         function submitData() {
             collegeName = document.getElementById("collegeName").value;
 
-            if (!collegeName) {
-                alert("Please enter a college name.");
-                return;
+             if (!collegeName) {
+                    alert("Please enter a college name.");
+                    return;
             }
 
-            // Prepare the data to pass in the URL
-            const playerNames = players.map(player => `${player.name} (FIE ID: ${player.fieId})`).join(",");
-            const queryParams = `?players=${encodeURIComponent(playerNames)}&college=${encodeURIComponent(collegeName)}`;
-
-            // Open team-roster.html with the query parameters
-            const newPage = window.open(`team_roster.html${queryParams}`, "_blank");
-
-            if (newPage) {
-                newPage.document.close();
-            } else {
-                alert("Please allow popups for this site.");
-            }
+    // Redirect to coach.html without query parameters
+            window.location.href = "coach.html";
         }
     </script>
 </body>
