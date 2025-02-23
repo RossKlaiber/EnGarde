@@ -108,9 +108,9 @@
                 document.getElementById("coach-name").innerText = `Coach: ${teamData["Coach name"]}`;
 
                 const playersList = document.getElementById("players-list");
-                teamData.Applicants.forEach(player => {
+                teamData.Applicants.forEach((player, index) => {
                     const li = document.createElement("li");
-                    li.onclick = () => window.location.href = 'coach_player_profile.html';
+                    li.onclick = () => window.location.href = 'applicant' +index+'.html';
                     const img = document.createElement("img");
                     img.src = player.FencerData.Image;
                     img.alt = player.FencerData.Name;
