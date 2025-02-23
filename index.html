@@ -45,7 +45,7 @@
                 <p><strong>Age:</strong> <span id="age">N/A</span></p>
             </div>
             <div class="col-md-12">
-                <p><strong>Bio:</strong> <span id="bio">Dataset 42</span></p>
+                <p><strong>Weapon:</strong> <span id="weapon">Dataset 42</span></p>
             </div>
         </div>
 
@@ -88,7 +88,7 @@
 
             document.getElementById('profile-name').textContent = data['Name'] || 'Unknown';
             document.getElementById('fie-rank').textContent = data['Rank'] || 'N/A';
-            document.getElementById('bio').textContent = data['Weapon'] || 'N/A';
+            document.getElementById('weapon').textContent = data['Weapon'] || 'N/A';
             document.getElementById('profile-location').textContent = data['Residence'] || 'N/A';
             document.getElementById('handedness').textContent = data['Handedness'] || 'N/A';
             document.getElementById('age').textContent = data['Age'] || 'N/A';
@@ -105,11 +105,12 @@
             const losses = gameData.Competitions.map(comp => comp.Losses);
             const differences = gameData.Competitions.map(comp => comp.Difference);
             const annuals = gameData.YearlySummary.map(comp => comp.Difference);
+            const annual_names = gameData.YearlySummary.map(comp => comp.Year);
 
             createChart(document.getElementById('chart1'), 'line', wins, 'Wins');
             createChart(document.getElementById('chart2'), 'line', losses, 'Losses');
             createChart2(document.getElementById('chart3'), 'line', differences, 'Differential');
-            createChart2(document.getElementById('chart4'), 'line', annuals, 'Differential');
+            createChart2(document.getElementById('chart4'), 'line', annuals, 'Differential', annual_names);
 
             if (data['Image']) {
                 document.querySelector("img.rounded-circle").src = data['Image'];
@@ -151,13 +152,17 @@
         });
     }
 
-    function createChart2(ctx, type, data, label) {
+    function createChart2(ctx, type, data, label, x_axis=null) {
         const maxVal = Math.max(15, ...data);
-
+        if (x_axis != null) {
+            x_labels = x_axis
+        } else {
+            x_labels = createArray(data.length)
+        }
         new Chart(ctx, {
             type: type,
             data: {
-                labels: Array.from({ length: data.length }, (_, i) => i + 1),
+                labels: x_labels,
                 datasets: [{
                     label: label,
                     data: data,
