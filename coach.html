@@ -55,6 +55,8 @@
     </div>
 
     <script>
+        function titleCase(s) {return s.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');}
+
         fetch('roster.json')
             .then(response => response.json())
             .then(teamData => {
@@ -69,7 +71,7 @@
                     img.src = player.FencerData.Image;
                     img.alt = player.FencerData.Name;
                     const span = document.createElement("span");
-                    span.innerText = `${player.FencerData.Name} - ${player.FencerData.Weapon}`;
+                    span.innerText = `${titleCase(player.FencerData.Name)} - ${titleCase(player.FencerData.Weapon)}`;
                     li.appendChild(img);
                     li.appendChild(span);
                    playersList.appendChild(li);
